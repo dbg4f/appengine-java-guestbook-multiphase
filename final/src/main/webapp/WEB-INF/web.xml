@@ -14,6 +14,16 @@
       <url-pattern>/sign</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+      <servlet-name>telemetry</servlet-name>
+      <servlet-class>ee.dbg4f.iot.hub.gae.TelemetryServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>telemetry</servlet-name>
+      <url-pattern>/telemetry</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>
@@ -28,8 +38,14 @@
       <filter-name>ObjectifyFilter</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
+
     <listener>
       <listener-class>com.example.guestbook.OfyHelper</listener-class>
     </listener>
+
+    <listener>
+      <listener-class>ee.dbg4f.iot.hub.gae.TelemetryInitializer</listener-class>
+    </listener>
+
 <!-- [END Objectify] -->
 </web-app>
