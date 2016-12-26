@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author bogdel on 10/11/16.
@@ -26,7 +27,7 @@ public class TelemetryServlet extends HttpServlet {
 
         }
 
-        resp.sendRedirect("/telemetry.jsp");
+
 
 
 

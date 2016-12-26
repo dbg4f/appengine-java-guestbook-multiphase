@@ -6,6 +6,7 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="ee.dbg4f.iot.hub.gae.TelemetryEntry" %>
+<%@ page import="ee.dbg4f.iot.hub.gae.Config" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -20,6 +21,17 @@
 
 
     <%
+        List<Config> config1 = ObjectifyService.ofy()
+                .load()
+                .type(Config.class)
+                .list();
+
+        pageContext.setAttribute("config", config1);
+
+        %>
+            <blockquote>${fn:escapeXml(config)}</blockquote>
+            <%
+
         List<TelemetryEntry> telemetryEntries = ObjectifyService.ofy()
                 .load()
                 .type(TelemetryEntry.class) // We want only Greetings

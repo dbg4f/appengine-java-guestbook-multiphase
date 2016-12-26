@@ -19,9 +19,11 @@ package com.example.guestbook;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import ee.dbg4f.iot.hub.gae.Config;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
+import java.util.List;
 
 /**
  * OfyHelper, a ServletContextListener, is setup in web.xml to run before a JSP is run.  This is
@@ -33,6 +35,10 @@ public class OfyHelper implements ServletContextListener {
     // request.
     ObjectifyService.register(Guestbook.class);
     ObjectifyService.register(Greeting.class);
+    ObjectifyService.register(Config.class);
+
+
+
   }
 
   public void contextDestroyed(ServletContextEvent event) {

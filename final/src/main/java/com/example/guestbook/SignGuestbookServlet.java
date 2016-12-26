@@ -28,12 +28,14 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.ObjectifyService;
+import ee.dbg4f.iot.hub.gae.Config;
 
 /**
  * Form Handling Servlet
@@ -63,6 +65,17 @@ public class SignGuestbookServlet extends HttpServlet {
     // Use Objectify to save the greeting and now() is used to make the call synchronously as we
     // will immediately get a new page using redirect and we want the data to be present.
     ObjectifyService.ofy().save().entity(greeting).now();
+
+    List<Config> config1 = ObjectifyService.ofy()
+            .load()
+            .type(Config.class)
+            .list();
+
+    if (config1.isEmpty()) {
+      ObjectifyService.ofy().save().entity(new Config("{\"test\":123}")).now();
+    }
+
+    resp.sendRedirect("/telemetry.jsp");
 
     resp.sendRedirect("/guestbook.jsp?guestbookName=" + guestbookName);
   }
