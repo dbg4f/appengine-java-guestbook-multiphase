@@ -1,5 +1,8 @@
 package ee.dbg4f.iot.hub.gae;
 
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.http.HttpServlet;
@@ -28,6 +31,17 @@ public class TelemetryServlet extends HttpServlet {
         }
 
 
+        
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        User user = userService.getCurrentUser();
+
+        if (user != null) {
+
+
+
+        }
 
 
 
