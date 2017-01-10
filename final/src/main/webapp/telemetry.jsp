@@ -19,17 +19,6 @@
 
     <h1>Telemetry</h1>
 
-
-    <%
-        List<Config> config1 = ObjectifyService.ofy()
-                .load()
-                .type(Config.class)
-                .list();
-
-        pageContext.setAttribute("config", config1);
-
-        %>
-            <blockquote>${fn:escapeXml(config)}</blockquote>
             <%
 
         List<TelemetryEntry> telemetryEntries = ObjectifyService.ofy()

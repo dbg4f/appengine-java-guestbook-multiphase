@@ -66,10 +66,7 @@ public class SignGuestbookServlet extends HttpServlet {
     // will immediately get a new page using redirect and we want the data to be present.
     ObjectifyService.ofy().save().entity(greeting).now();
 
-    List<Config> config1 = ObjectifyService.ofy()
-            .load()
-            .type(Config.class)
-            .list();
+    List<Config> config1 = getConfig();
 
     if (config1.isEmpty()) {
       ObjectifyService.ofy().save().entity(new Config("{\"test\":123}")).now();
@@ -78,6 +75,13 @@ public class SignGuestbookServlet extends HttpServlet {
     resp.sendRedirect("/telemetry.jsp");
 
     resp.sendRedirect("/guestbook.jsp?guestbookName=" + guestbookName);
+  }
+
+  private List<Config> getConfig() {
+    return ObjectifyService.ofy()
+            .load()
+            .type(Config.class)
+            .list();
   }
 }
 //[END all]

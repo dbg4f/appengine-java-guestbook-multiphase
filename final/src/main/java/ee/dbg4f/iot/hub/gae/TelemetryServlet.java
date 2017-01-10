@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author bogdel on 10/11/16.
  */
 public class TelemetryServlet extends HttpServlet {
+
+    private static final Logger log = Logger.getLogger(TelemetryServlet.class.getName());
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -27,6 +31,23 @@ public class TelemetryServlet extends HttpServlet {
 
             ObjectifyService.ofy().save().entity(telemetryEntry).now();
 
+
+        }
+
+        String encrypted = req.getParameter("encrypted");
+
+        if (encrypted != null) {
+
+            try {
+                String text = AppServicesFactory.getCipher().decrypt(encrypted);
+
+                TelemetryEntry telemetryEntry = new TelemetryEntry("sample", null, "text", text);
+
+                ObjectifyService.ofy().save().entity(telemetryEntry).now();
+
+            } catch (Exception e) {
+                log.log(Level.WARNING, "Failed to decrypt and save " + encrypted + " " + e.getMessage(), e);
+            }
 
         }
 

@@ -6,7 +6,7 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="ee.dbg4f.iot.hub.gae.TelemetryEntry" %>
-<%@ page import="ee.dbg4f.iot.hub.gae.Config" %>
+<%@ page import="ee.dbg4f.iot.hub.gae.AppServicesFactory" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -26,20 +26,12 @@
 
 
     <%
-        List<Config> config1 = ObjectifyService.ofy()
-                .load()
-                .type(Config.class)
-                .list();
 
-        pageContext.setAttribute("config", config1);
+        pageContext.setAttribute("config", AppServicesFactory.getAppSettings().toString());
 
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		if (user != null) {
-			pageContext.setAttribute("config", config1);
-		}
-		else 
-		{
+		if (user == null) {
 			pageContext.setAttribute("config", "Not authorized");
 		}
 
