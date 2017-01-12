@@ -39,7 +39,7 @@ public class TelemetryServlet extends HttpServlet {
         if (encrypted != null) {
 
             try {
-                String text = AppServicesFactory.getCipher().decrypt(encrypted);
+                String text = AppServicesFactory.getCipher().decrypt(new Base64Text(encrypted));
 
                 TelemetryEntry telemetryEntry = new TelemetryEntry("sample", null, "text", text);
 
@@ -47,6 +47,7 @@ public class TelemetryServlet extends HttpServlet {
 
             } catch (Exception e) {
                 log.log(Level.WARNING, "Failed to decrypt and save " + encrypted + " " + e.getMessage(), e);
+                resp.sendError(403);
             }
 
         }

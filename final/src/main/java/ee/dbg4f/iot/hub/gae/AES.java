@@ -15,46 +15,45 @@ import java.security.NoSuchProviderException;
  */
 public class AES {
 
-    private String key;
-    private String iv;
+    private Base64Text key;
+    private Base64Text iv;
 
-
-    public AES(String key, String iv) {
+    public AES(Base64Text key, Base64Text iv) {
         this.key = key;
         this.iv = iv;
         checkKey();
     }
 
     private void checkKey() {
-        if (key == null || key.length() == 0 || iv == null || iv.length() == 0) {
+        if (key == null || key.getBytes().length == 0 || iv == null || iv.getBytes().length == 0) {
             throw new IllegalStateException("Key and IV not assigned");
         }
     }
 
-    public String encrypt(String text) throws Exception {
+    public Base64Text encrypt(String text) throws Exception {
         checkKey();
-        return new String(Base64.encodeBase64(encryptBytes(text)));
+        return new Base64Text(encryptBytes(text.getBytes()));
     }
 
-    public String decrypt(String text) throws Exception {
+    public String decrypt(Base64Text text) throws Exception {
         checkKey();
-        return new String(decryptBytes(Base64.decodeBase64(text)));
+        return new String(decryptBytes(text.getBytes()));
 
     }
 
-    public byte[] encryptBytes(String plainText) throws Exception {
+    public byte[] encryptBytes(byte[] bytes) throws Exception {
         checkKey();
         Cipher cipher = getSunJCE();
         cipher.init(Cipher.ENCRYPT_MODE, getKey(), getIv());
-        return cipher.doFinal(plainText.getBytes("UTF-8"));
+        return cipher.doFinal(bytes);
     }
 
     private IvParameterSpec getIv() throws UnsupportedEncodingException {
-        return new IvParameterSpec(iv.getBytes("UTF-8"));
+        return new IvParameterSpec(iv.getBytes());
     }
 
     private SecretKeySpec getKey() throws UnsupportedEncodingException {
-        return new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+        return new SecretKeySpec(key.getBytes(), "AES");
     }
 
     public String decryptBytes(byte[] text) throws Exception{

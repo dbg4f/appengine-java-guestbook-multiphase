@@ -23,7 +23,7 @@ public class AppServicesFactory {
     public static AES getCipher() {
 
         if (cipher == null) {
-            cipher = new AES(appSettings.getValue("key"), appSettings.getValue("iv"));
+            cipher = new AES(new Base64Text(appSettings.getValue("key")), new Base64Text(appSettings.getValue("iv")));
         }
 
         return cipher;
