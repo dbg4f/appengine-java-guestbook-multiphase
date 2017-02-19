@@ -9,6 +9,19 @@ public class GenKeys {
 
     public static void main(String[] args) throws Exception {
 
+        byte[] bytes = new Base64Text("HpqEnAbNHMkHf6F10+HSNw==").getBytes();
+        for (int i=0; i<bytes.length; i++) {
+            System.out.print(bytes[i] + " ");
+        }
+        System.out.println("");
+
+        bytes = new Base64Text("HpqEnAbNHMkHf6F10-HSNw==").getBytes();
+        for (int i=0; i<bytes.length; i++) {
+            System.out.print(bytes[i] + " ");
+        }
+
+        System.out.println("");
+
         byte key[] = new byte[16];
 
         generateAndShow(key);

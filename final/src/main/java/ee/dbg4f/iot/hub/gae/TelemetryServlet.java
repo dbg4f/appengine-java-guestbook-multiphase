@@ -3,6 +3,8 @@ package ee.dbg4f.iot.hub.gae;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.appengine.repackaged.com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.http.HttpServlet;
@@ -20,9 +22,21 @@ public class TelemetryServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(TelemetryServlet.class.getName());
 
+
+    public static boolean isJSONValid(String jsonInString) {
+        try {
+            new Gson().fromJson(jsonInString, Object.class);
+            return true;
+        } catch(JsonSyntaxException ex) {
+            log.log(Level.WARNING, "Json " + jsonInString + " not valid", ex);
+            return false;
+        }
+    }
+
+
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+/*
         String sample = req.getParameter("sample");
 
         if (sample != null) {
@@ -33,6 +47,7 @@ public class TelemetryServlet extends HttpServlet {
 
 
         }
+        */
 
         String encrypted = req.getParameter("encrypted");
 
@@ -41,9 +56,20 @@ public class TelemetryServlet extends HttpServlet {
             try {
                 String text = AppServicesFactory.getCipher().decrypt(new Base64Text(encrypted));
 
-                TelemetryEntry telemetryEntry = new TelemetryEntry("sample", null, "text", text);
+                text = text.trim();
 
-                ObjectifyService.ofy().save().entity(telemetryEntry).now();
+                if (isJSONValid(text)) {
+
+                    TelemetryEntry telemetryEntry = new TelemetryEntry("sample", null, "text", text);
+
+                    ObjectifyService.ofy().save().entity(telemetryEntry).now();
+                }
+                else {
+                    String errorTextJsonNotValid = encrypted + ", text=" + text + " is not valid ";
+                    log.log(Level.WARNING, errorTextJsonNotValid);
+                    resp.sendError(400, errorTextJsonNotValid);
+                }
+
 
             } catch (Exception e) {
                 log.log(Level.WARNING, "Failed to decrypt and save " + encrypted + " " + e.getMessage(), e);
